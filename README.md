@@ -68,10 +68,13 @@ $ python3 rigexpert-csv-plot.py sweep.csv
 $ python3 rigexpert-csv-imp2swr.py
 Convert sweep CSV from impedance to VSWR.
 
-Usage: rigexpert-csv-imp2swr.py <impedance sweep CSV>
+Usage: rigexpert-csv-imp2swr.py [--smooth] <impedance sweep CSV>
 
 Example:
     python3 rigexpert-csv-imp2swr.py sweep.imp.csv > sweep.swr.csv
+
+Example (smoothed version):
+    python3 rigexpert-csv-imp2swr.py --smooth sweep.imp.csv > sweep.smooth.swr.csv
 
 Impedance CSV format:
     <freq in MHz>,<resistance in ohms>,<reactance in ohms>
