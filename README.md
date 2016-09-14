@@ -1,6 +1,6 @@
-# RigExpert Antenna Analyzer Scripts
+# RigExpert Antenna Analyzer Tools
 
-This is a simple set of Python scripts to dump impedance sweeps from a
+This is a simple set of Python tools to dump impedance sweeps from a
 [RigExpert](http://www.rigexpert.com/) antenna analyzer, plot sweeps, and
 convert sweeps from impedance to VSWR. The sweeps are stored in CSV.
 
