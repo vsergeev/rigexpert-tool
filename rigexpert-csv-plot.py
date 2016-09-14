@@ -59,9 +59,9 @@ if __name__ == "__main__":
     plt.ylabel('VSWR')
     plt.title('VSWR from {:.2f} MHz to {:.2f} MHz'.format(freqs[0], freqs[-1]))
 
-    # Set 10.0 SWR as maximum ylimit
+    # Set y limits from 0.0 to max 10.0
     yl, yh = plt.gca().get_ylim()
-    plt.ylim((yl, min(yh, 10)))
+    plt.ylim((0, min(yh, 10)))
     # Include 1.0 SWR in y ticks
     plt.yticks(list(plt.yticks()[0]) + [1.0])
 
