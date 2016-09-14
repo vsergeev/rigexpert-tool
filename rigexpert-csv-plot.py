@@ -66,9 +66,13 @@ if __name__ == "__main__":
     plt.yticks(list(plt.yticks()[0]) + [1.0])
 
     # Find minima in smoothed SWRs curve
-    for i in scipy.signal.argrelextrema(filt_swrs, operator.lt)[0]:
-        # Annotate point if SWR is less than 4
-        if swrs[i] < 4:
+    arg_minima = scipy.signal.argrelextrema(filt_swrs, operator.lt)[0]
+    print(len(arg_minima))
+    # Filter minima with SWR less than 3
+    arg_minima = [e for e in arg_minima if swrs[e] < 3]
+    # Annotate points if there's 15 or less
+    if len(arg_minima) <= 15:
+        for i in arg_minima:
             plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], swrs[i]), xy=(freqs[i], swrs[i]))
 
     plt.show()
