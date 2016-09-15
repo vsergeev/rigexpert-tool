@@ -22,15 +22,12 @@ def imp_to_vswr(stream):
 def smooth_vswr(stream, num_taps=64, alpha=0.06):
     freqs, vswrs = zip(*list(stream))
 
-    # Determine first non-inf sample index
-    start_index = 0 if math.inf not in vswrs else (len(vswrs) - vswrs[::-1].index(math.inf))
-
-    # Filter VSWRs, starting at first non-inf sample
+    # Filter VSWRs
     b, a = scipy.signal.firwin(num_taps, alpha), [1]
-    filt_vswrs = scipy.signal.filtfilt(b, a, vswrs[start_index:])
+    filt_vswrs = scipy.signal.filtfilt(b, a, vswrs)
 
-    # Concatenate leading inf samples
-    filt_vswrs = list(vswrs[:start_index]) + list(filt_vswrs)
+    # Translate nans to infs
+    filt_vswrs[scipy.isnan(filt_vswrs)] = math.inf
 
     return zip(freqs, filt_vswrs)
 
