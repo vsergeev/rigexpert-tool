@@ -1,4 +1,4 @@
-# RigExpert Antenna Analyzer Tools
+# rigexpert-tool [![GitHub release](https://img.shields.io/github/release/vsergeev/rigexpert-tool.svg?maxAge=7200)](https://github.com/vsergeev/rigexpert-tool) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vsergeev/rigexpert-tool/blob/master/LICENSE)
 
 This is a simple set of Python tools to dump impedance sweeps from a
 [RigExpert](http://www.rigexpert.com/) antenna analyzer, plot sweeps, and
