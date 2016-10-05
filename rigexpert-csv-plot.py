@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import math
 import operator
@@ -16,7 +18,7 @@ def imp_to_vswr(r, x):
 
     return swr
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Plot an impedance or VSWR sweep CSV.",
         epilog=
@@ -92,3 +94,6 @@ if __name__ == "__main__":
                 plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], vswrs[i]), xy=(freqs[i], vswrs[i]))
 
     plt.show()
+
+if __name__ == "__main__":
+    main()
