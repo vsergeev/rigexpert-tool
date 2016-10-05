@@ -226,7 +226,7 @@ def stream_smooth_vswr(stream, num_taps=64, alpha=0.06):
     freqs, vswrs = zip(*list(stream))
 
     # Filter VSWRs
-    b, a = scipy.signal.firwin(num_taps, alpha), [1]
+    b, a = scipy.signal.firwin(min(num_taps, int(len(vswrs)/3.0)-1), alpha), [1]
     filt_vswrs = scipy.signal.filtfilt(b, a, vswrs)
 
     # Translate nans to infs
