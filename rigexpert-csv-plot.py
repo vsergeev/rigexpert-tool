@@ -38,7 +38,7 @@ if __name__ == "__main__":
                 try:
                     swr = (1 + gamma)/(1 - gamma)
                 except ZeroDivisionError:
-                    swr = math.inf
+                    swr = float("inf")
 
             freqs.append(freq)
             swrs.append(swr)

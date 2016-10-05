@@ -22,15 +22,15 @@ def transact_cmd(ser, cmd):
 if __name__ == "__main__":
     if len(sys.argv) < 5:
         print("Dump a RigExpert antenna analyzer impedance sweep in CSV to stdout.")
-        print()
+        print("")
         print("Usage: {} <serial port> <center frequency> <sweep range> <number of points>".format(sys.argv[0]))
-        print()
+        print("")
         print("Example: Sweep 0.0 - 30.0 MHz with 5000 points")
         print("    python3 {} /dev/ttyUSB0 15e6 30e6 5000 > sweep.csv".format(sys.argv[0]))
-        print()
+        print("")
         print("Example: Sweep 7.000 - 7.300 MHz with 300 points")
         print("    python3 {} /dev/ttyUSB0 7.150e6 0.300e6 300 > sweep.csv".format(sys.argv[0]))
-        print()
+        print("")
         print("CSV Format:")
         print("    <freq in MHz>,<resistance in ohms>,<reactance in ohms>")
         print("    e.g. 15.040000,50.56,0.08 is F=15.04 MHz,R=50.56 ohms,X=0.08 ohms")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         count += 1
 
         # Print progress bar
-        progress = count/num_points
+        progress = float(count)/num_points
         sys.stderr.write("\r[" + "="*int(progress*76) + "-"*(76-int(progress*76)) + "] {}% {}/{}".format(int(progress*100), count, num_points))
 
     sys.stderr.write("\n")
