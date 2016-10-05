@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import sys
 import math
@@ -36,7 +38,7 @@ def smooth_vswr(stream, num_taps=64, alpha=0.06):
 
     return zip(freqs, filt_vswrs)
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Convert sweep CSV from impedance to VSWR.",
         epilog=
@@ -69,3 +71,6 @@ if __name__ == "__main__":
                 write_csv(f_out, smooth_vswr(imp_to_vswr(read_csv(f_in))))
             else:
                 write_csv(f_out, imp_to_vswr(read_csv(f_in)))
+
+if __name__ == "__main__":
+    main()
