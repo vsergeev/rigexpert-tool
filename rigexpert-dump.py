@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import argparse
 
@@ -21,7 +23,7 @@ def transact(ser, cmd):
 def transact_cmd(ser, cmd):
     list(transact(ser, cmd))
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Dump a RigExpert antenna analyzer impedance sweep in CSV to stdout.",
         epilog=
@@ -82,3 +84,6 @@ if __name__ == "__main__":
 
     # Close serial port
     ser.close()
+
+if __name__ == "__main__":
+    main()
