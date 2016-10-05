@@ -150,7 +150,7 @@ def plot(args):
             vswrs.append(vswr)
 
     # Create smoothed VSWRs
-    b, a = scipy.signal.firwin(64, 0.06), [1]
+    b, a = scipy.signal.firwin(min(64, int(len(vswrs)/3.0)-1), 0.06), [1]
     filt_vswrs = scipy.signal.filtfilt(b, a, vswrs)
 
     # Plot raw VSWRs
