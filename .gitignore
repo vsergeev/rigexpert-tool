@@ -1,1 +1,4 @@
 *.csv
+build/
+dist/
+rigexpert_tool.egg-info/
