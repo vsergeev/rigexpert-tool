@@ -1,6 +1,7 @@
 import sys
 import math
 import operator
+import argparse
 
 import matplotlib.pyplot as plt
 import scipy.signal
@@ -16,17 +17,29 @@ def imp_to_vswr(r, x):
     return swr
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Plot an impedance or VSWR sweep CSV.")
-        print()
-        print("Usage: {} <CSV>".format(sys.argv[0]))
-        sys.exit(0)
+    parser = argparse.ArgumentParser(
+        description="Plot an impedance or VSWR sweep CSV.",
+        epilog=
+        "Example:\n"
+        "  {0} sweep.imp.csv\n"
+        "\n"
+        "Example, with annotated VSWR:\n"
+        "  {0} --annotate sweep.imp.csv\n"
+        "\n".format(sys.argv[0]),
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument("csv", metavar="<CSV>")
+    parser.add_argument('--annotate', help='annotate VSWR minima', action='store_true')
+    if len(sys.argv) == 1:
+        parser.print_help()
+        parser.exit(1)
+    args = parser.parse_args()
 
     freqs = []
     vswrs = []
 
     # Read CSV file
-    with open(sys.argv[1], "r") as f:
+    with open(args.csv, "r") as f:
         for line in f:
             fields = line.split(",")
 
@@ -68,13 +81,14 @@ if __name__ == "__main__":
     # Include 1.0 SWR in y ticks
     plt.yticks(list(plt.yticks()[0]) + [1.0])
 
-    # Find minima in smoothed VSWRs curve
-    arg_minima = scipy.signal.argrelextrema(filt_vswrs, operator.lt)[0]
-    # Filter minima with SWR less than 3
-    arg_minima = [e for e in arg_minima if vswrs[e] < 3]
-    # Annotate points if there's 15 or less
-    if len(arg_minima) <= 15:
-        for i in arg_minima:
-            plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], vswrs[i]), xy=(freqs[i], vswrs[i]))
+    if args.annotate:
+        # Find minima in smoothed VSWRs curve
+        arg_minima = scipy.signal.argrelextrema(filt_vswrs, operator.lt)[0]
+        # Filter minima with SWR less than 3
+        arg_minima = [e for e in arg_minima if vswrs[e] < 3]
+        # Annotate points if there's 15 or less
+        if len(arg_minima) <= 15:
+            for i in arg_minima:
+                plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], vswrs[i]), xy=(freqs[i], vswrs[i]))
 
     plt.show()
