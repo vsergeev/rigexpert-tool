@@ -5,6 +5,16 @@ import operator
 import matplotlib.pyplot as plt
 import scipy.signal
 
+def imp_to_vswr(r, x):
+    gamma = math.sqrt((r - 50)**2 + x**2)/math.sqrt((r + 50)**2 + x**2)
+
+    try:
+        swr = (1 + gamma)/(1 - gamma)
+    except ZeroDivisionError:
+        swr = float("inf")
+
+    return swr
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Plot an impedance or VSWR sweep CSV.")
@@ -13,10 +23,10 @@ if __name__ == "__main__":
         sys.exit(0)
 
     freqs = []
-    swrs = []
+    vswrs = []
 
     # Read CSV file
-    with open(sys.argv[1]) as f:
+    with open(sys.argv[1], "r") as f:
         for line in f:
             fields = line.split(",")
 
@@ -28,29 +38,22 @@ if __name__ == "__main__":
 
             if len(fields) == 2:
                 # SWR CSV
-                swr = float(fields[1])
+                vswr = float(fields[1])
             elif len(fields) == 3:
                 # Impedance CSV
-
-                # Compute SWR
-                r, x = float(fields[1]), float(fields[2])
-                gamma = math.sqrt((r - 50)**2 + x**2)/math.sqrt((r + 50)**2 + x**2)
-                try:
-                    swr = (1 + gamma)/(1 - gamma)
-                except ZeroDivisionError:
-                    swr = float("inf")
+                vswr = imp_to_vswr(float(fields[1]), float(fields[2]))
 
             freqs.append(freq)
-            swrs.append(swr)
+            vswrs.append(vswr)
 
-    # Create smoothed SWRs
+    # Create smoothed VSWRs
     b, a = scipy.signal.firwin(64, 0.06), [1]
-    filt_swrs = scipy.signal.filtfilt(b, a, swrs)
+    filt_vswrs = scipy.signal.filtfilt(b, a, vswrs)
 
-    # Plot raw SWRs
-    plt.plot(freqs, swrs)
-    # Plot smoothed SWRs
-    plt.plot(freqs, filt_swrs, color='red')
+    # Plot raw VSWRs
+    plt.plot(freqs, vswrs)
+    # Plot smoothed VSWRs
+    plt.plot(freqs, filt_vswrs, color='red')
     # Plot 1.0 reference line
     plt.axhline(1.0, color='r', ls='dashed')
 
@@ -65,14 +68,13 @@ if __name__ == "__main__":
     # Include 1.0 SWR in y ticks
     plt.yticks(list(plt.yticks()[0]) + [1.0])
 
-    # Find minima in smoothed SWRs curve
-    arg_minima = scipy.signal.argrelextrema(filt_swrs, operator.lt)[0]
-    print(len(arg_minima))
+    # Find minima in smoothed VSWRs curve
+    arg_minima = scipy.signal.argrelextrema(filt_vswrs, operator.lt)[0]
     # Filter minima with SWR less than 3
-    arg_minima = [e for e in arg_minima if swrs[e] < 3]
+    arg_minima = [e for e in arg_minima if vswrs[e] < 3]
     # Annotate points if there's 15 or less
     if len(arg_minima) <= 15:
         for i in arg_minima:
-            plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], swrs[i]), xy=(freqs[i], swrs[i]))
+            plt.annotate('{:.2f} MHz\n{:.2f} VSWR'.format(freqs[i], vswrs[i]), xy=(freqs[i], vswrs[i]))
 
     plt.show()
